@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Animated scrollTo - DEMO</title>
+</head>
+<body>
+  <button id="button">Scroll to Target</button>
+
+  <div style="height: 1000px;"></div>
+
+  <h2 id="scroll-target">
+    Target
+  </h2>
+
+  <div style="height: 1000px;"></div>
+
+  <script src="scrollto.js"></script>
+
+  <script type="text/javascript">
+    var button = document.getElementById('button');
+    button.addEventListener('click', function() {
+      scrollHelper.scrollTo('#scroll-target', 2000);
+    });
+  </script>
+</body>
+</html>
