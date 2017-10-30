@@ -34,6 +34,13 @@ var scrollHelper = (function(global, window, document, undefined) {
     }
   }
 
+  function getNextScrollPosition(currentScrollPosition, scrollByDistance) {
+    return {
+      x: currentScrollPosition.x + scrollByDistance.x,
+      y: currentScrollPosition.y + scrollByDistance.y
+    }
+  }
+
   function scrollTo(targetSelector, duration) {
     var start = performance.now(),
       target = document.querySelector(targetSelector),
@@ -58,9 +65,15 @@ var scrollHelper = (function(global, window, document, undefined) {
         previousTimePassed = timePassed;
       }
 
-      window.scrollBy(scrollByDistance.x, scrollByDistance.y);
+      var nextScrollPosition = getNextScrollPosition(currentScrollPosition, scrollByDistance);
 
-      currentScrollPosition = getCurrentScrollPosition();
+      if (nextScrollPosition.x >= target.offsetLef || nextScrollPosition.y >= target.offsetTop) {
+        window.scrollTo(target.offsetLeft, target.offsetTop);
+        previousTimePassed = timePassed;
+      } else {
+        window.scrollBy(scrollByDistance.x, scrollByDistance.y);
+        currentScrollPosition = getCurrentScrollPosition();
+      }
 
       if (timePassed < duration) {
         requestAnimationFrame(animate);
