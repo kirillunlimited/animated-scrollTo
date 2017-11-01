@@ -2,10 +2,10 @@
 
 var scrollHelper = (function(global, window, document, undefined) {
 
-  function getCurrentScrollPosition() {
+  function getCurrentScrollPosition(container) {
     return {
-      x: window.scrollX || window.pageXOffset,
-      y: window.scrollY || window.pageYOffset
+      x: container.scrollX || container.pageXOffset || container.scrollLeft,
+      y: container.scrollY || container.pageYOffset || container.scrollTop
     }
   }
 
@@ -41,10 +41,11 @@ var scrollHelper = (function(global, window, document, undefined) {
     }
   }
 
-  function scrollTo(targetSelector, duration) {
+  function scrollTo(containerSelector, targetSelector, duration) {
     var start = performance.now(),
+      container = document.querySelector(containerSelector) || window,
       target = document.querySelector(targetSelector),
-      currentScrollPosition = getCurrentScrollPosition(),
+      currentScrollPosition = getCurrentScrollPosition(container),
       scrollTarget = getScrollTarget(target),
       currentTime = 0,
       previousTimePassed = 0;
@@ -68,10 +69,10 @@ var scrollHelper = (function(global, window, document, undefined) {
       var nextScrollPosition = getNextScrollPosition(currentScrollPosition, scrollByDistance);
 
       if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop || timePassed >= duration) {
-        window.scrollTo(target.offsetLeft, target.offsetTop);
+        container.scrollTo(target.offsetLeft, target.offsetTop);
       } else {
-        window.scrollBy(scrollByDistance.x, scrollByDistance.y);
-        currentScrollPosition = getCurrentScrollPosition();
+        container.scrollBy(scrollByDistance.x, scrollByDistance.y);
+        currentScrollPosition = getCurrentScrollPosition(container);
         requestAnimationFrame(animate);
       }
 

@@ -17,16 +17,20 @@
 <body>
   <button id="button">Scroll to Target</button>
 
-  <h2 id="scroll-target">
-    Target
-  </h2>
+  <div id="container" style="height: 300px; overflow: scroll;">
+    <div class="innerContainer" style="height: 1000px;">
+      <h2 id="scroll-target">
+        Target
+      </h2>
+    </div>
+  </div>
 
   <script src="scrollto.js"></script>
 
   <script type="text/javascript">
     var button = document.getElementById('button');
     button.addEventListener('click', function() {
-      scrollHelper.scrollTo('#scroll-target', 2000);
+      scrollHelper.scrollTo('#container', '#scroll-target', 2000);
     });
   </script>
 </body>
