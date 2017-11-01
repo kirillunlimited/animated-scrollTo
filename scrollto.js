@@ -67,20 +67,14 @@ var scrollHelper = (function(global, window, document, undefined) {
 
       var nextScrollPosition = getNextScrollPosition(currentScrollPosition, scrollByDistance);
 
-      if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop) {
+      if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop || timePassed >= duration) {
         window.scrollTo(target.offsetLeft, target.offsetTop);
-        previousTimePassed = timePassed;
       } else {
         window.scrollBy(scrollByDistance.x, scrollByDistance.y);
         currentScrollPosition = getCurrentScrollPosition();
+        requestAnimationFrame(animate);
       }
 
-      if (timePassed < duration) {
-        requestAnimationFrame(animate);
-      } else {
-        timePassed = duration;
-        window.scrollTo(target.offsetLeft, target.offsetTop);
-      }
     });
   }
 
