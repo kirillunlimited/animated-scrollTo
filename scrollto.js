@@ -67,7 +67,7 @@ var scrollHelper = (function(global, window, document, undefined) {
 
       var nextScrollPosition = getNextScrollPosition(currentScrollPosition, scrollByDistance);
 
-      if (nextScrollPosition.x >= target.offsetLef || nextScrollPosition.y >= target.offsetTop) {
+      if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop) {
         window.scrollTo(target.offsetLeft, target.offsetTop);
         previousTimePassed = timePassed;
       } else {
