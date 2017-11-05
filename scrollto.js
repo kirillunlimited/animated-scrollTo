@@ -55,7 +55,7 @@ var scrollHelper = (function (global, window, document, undefined) {
     }
   }
 
-  function scrollTo(containerSelector, targetSelector, duration) {
+  function scrollTo(containerSelector, targetSelector, duration, callback) {
     var start = performance.now(),
       container = document.querySelector(containerSelector) || window,
       target = document.querySelector(targetSelector),
@@ -85,12 +85,14 @@ var scrollHelper = (function (global, window, document, undefined) {
 
       if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop || timePassed >= duration) {
         container.scrollTo(targetScrollPosition.x - containerDelta.x, targetScrollPosition.y - containerDelta.y);
+        if (callback) {
+          callback();
+        }
       } else {
         container.scrollBy(scrollByDistance.x, scrollByDistance.y);
         currentScrollPosition = getCurrentScrollPosition(container, containerDelta);
         requestAnimationFrame(animate);
       }
-
     });
   }
 
