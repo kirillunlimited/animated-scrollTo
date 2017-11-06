@@ -18,8 +18,8 @@ var scrollHelper = (function (global, window, document, undefined) {
 
   function getCurrentScrollPosition(container, containerDelta) {
     return {
-      x: (container.scrollX || container.pageXOffset || container.scrollLeft) + containerDelta.x,
-      y: (container.scrollY || container.pageYOffset || container.scrollTop) + containerDelta.y
+      x: (container.scrollX || container.pageXOffset || container.scrollLeft || 0) + containerDelta.x,
+      y: (container.scrollY || container.pageYOffset || container.scrollTop || 0) + containerDelta.y
     }
   }
 
@@ -55,9 +55,10 @@ var scrollHelper = (function (global, window, document, undefined) {
     }
   }
 
-  function scrollTo(containerSelector, targetSelector, duration, callback) {
+  function scrollTo(targetSelector, duration, options) {
     var start = performance.now(),
-      container = document.querySelector(containerSelector) || window,
+      options = options || {},
+      container = (options.container) ? document.querySelector(options.container) : window,
       target = document.querySelector(targetSelector),
       containerDelta = getContainerDelta(container),
       currentScrollPosition = getCurrentScrollPosition(container, containerDelta),
@@ -85,8 +86,8 @@ var scrollHelper = (function (global, window, document, undefined) {
 
       if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop || timePassed >= duration) {
         container.scrollTo(targetScrollPosition.x - containerDelta.x, targetScrollPosition.y - containerDelta.y);
-        if (callback) {
-          callback();
+        if (options.onAfter) {
+          options.onAfter();
         }
       } else {
         container.scrollBy(scrollByDistance.x, scrollByDistance.y);

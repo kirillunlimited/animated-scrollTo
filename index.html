@@ -30,7 +30,9 @@
   <script type="text/javascript">
     var button = document.getElementById('button');
     button.addEventListener('click', function() {
-      scrollHelper.scrollTo('#container', '#scroll-target', 2000);
+      scrollHelper.scrollTo('#scroll-target', 2000, {
+        container: '#container'
+      });
     });
   </script>
 </body>
