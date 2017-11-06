@@ -2,6 +2,15 @@
 
 var scrollHelper = (function (global, window, document, undefined) {
 
+  var requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      function (callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+  })();
+
   function getContainerDelta(container) {
     if (container === window) {
       return {
@@ -66,7 +75,7 @@ var scrollHelper = (function (global, window, document, undefined) {
       currentTime = 0,
       previousTimePassed = 0;
 
-    requestAnimationFrame(function animate(time) {
+    requestAnimFrame(function animate(time) {
       var timePassed = time - start,
         scrollByDistance = {
           x: 0,
@@ -92,7 +101,7 @@ var scrollHelper = (function (global, window, document, undefined) {
       } else {
         container.scrollBy(scrollByDistance.x, scrollByDistance.y);
         currentScrollPosition = getCurrentScrollPosition(container, containerDelta);
-        requestAnimationFrame(animate);
+        requestAnimFrame(animate);
       }
     });
   }
