@@ -17,8 +17,8 @@
 <body>
   <button id="button">Scroll to Target</button>
 
-  <div id="container" style="height: 300px; overflow: scroll; margin-top: 100px; margin-left: 100px; border: 1px solid #000;">
-    <div class="innerContainer" style="height: 1000px;">
+  <div id="container" style="height: 300px; overflow: scroll; margin-top: 1500px; margin-bottom: 1500px; margin-left: 100px; border: 1px solid #000;">
+    <div class="innerContainer" style="height: 1500px;">
       <h2 id="scroll-target">
         Target
       </h2>
@@ -30,8 +30,12 @@
   <script type="text/javascript">
     var button = document.getElementById('button');
     button.addEventListener('click', function() {
-      scrollHelper.scrollTo('#scroll-target', 2000, {
-        container: '#container'
+      scrollHelper.scrollTo('#container', 2000, {
+        onAfter: function () {
+          scrollHelper.scrollTo('#scroll-target', 2000, {
+            container: '#container'
+          });
+        }
       });
     });
   </script>

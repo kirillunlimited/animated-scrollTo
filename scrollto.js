@@ -32,10 +32,17 @@ var scrollHelper = (function (global, window, document, undefined) {
     }
   }
 
-  function getTargetScrollPosition(target) {
-    return {
-      x: target.offsetLeft || 0,
-      y: target.offsetTop || 0
+  function getTargetScrollPosition(target, container) {
+    if (container === window) {
+      return {
+        x: target.offsetLeft || 0,
+        y: target.offsetTop || 0
+      }
+    } else {
+      return {
+        x: (target.offsetLeft || 0) - (window.scrollX || window.pageXOffset),
+        y: (target.offsetTop || 0) - (window.scrollY || window.pageYOffset),
+      }
     }
   }
 
@@ -71,7 +78,7 @@ var scrollHelper = (function (global, window, document, undefined) {
       target = document.querySelector(targetSelector),
       containerDelta = getContainerDelta(container),
       currentScrollPosition = getCurrentScrollPosition(container, containerDelta),
-      targetScrollPosition = getTargetScrollPosition(target),
+      targetScrollPosition = getTargetScrollPosition(target, container),
       currentTime = 0,
       previousTimePassed = 0;
 
