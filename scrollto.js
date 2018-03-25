@@ -46,14 +46,21 @@ var scrollHelper = (function (global, window, document, undefined) {
     }
   }
 
+  function getDirectionDelta(currentScrollPosition, targetScrollPosition) {
+    return {
+      x: (currentScrollPosition.x < targetScrollPosition.x) ? 1 : -1,
+      y: (currentScrollPosition.y < targetScrollPosition.y) ? 1 : -1
+    }
+  }
+
   function getTimeDifference(previousTimePassed, timePassed) {
     return (previousTimePassed) ? timePassed - previousTimePassed : timePassed;
   }
 
   function getRemainingDistance(currentScrollPosition, targetScrollPosition) {
     return {
-      x: Math.abs(currentScrollPosition.x - targetScrollPosition.x),
-      y: Math.abs(currentScrollPosition.y - targetScrollPosition.y),
+      x: targetScrollPosition.x - currentScrollPosition.x,
+      y: targetScrollPosition.y - currentScrollPosition.y,
     }
   }
 
@@ -71,6 +78,21 @@ var scrollHelper = (function (global, window, document, undefined) {
     }
   }
 
+  function isFinalFrame(nextScrollPosition, target, timePassed, duration, directionDelta) {
+    if (timePassed < duration) {
+      if ((directionDelta.x === 1 && nextScrollPosition.x > target.offsetLeft) ||
+          (directionDelta.x === -1 && nextScrollPosition.x < target.offsetLeft) ||
+          (directionDelta.y === 1 && nextScrollPosition.y > target.offsetTop) ||
+          (directionDelta.y === -1 && nextScrollPosition.y < target.offsetTop)) {
+            return true
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
   function scrollTo(targetSelector, duration, options) {
     var start = performance.now(),
       options = options || {},
@@ -79,6 +101,7 @@ var scrollHelper = (function (global, window, document, undefined) {
       containerDelta = getContainerDelta(container),
       currentScrollPosition = getCurrentScrollPosition(container, containerDelta),
       targetScrollPosition = getTargetScrollPosition(target, container),
+      directionDelta = getDirectionDelta(currentScrollPosition, targetScrollPosition),
       currentTime = 0,
       previousTimePassed = 0;
 
@@ -95,12 +118,12 @@ var scrollHelper = (function (global, window, document, undefined) {
           remainingDistance = getRemainingDistance(currentScrollPosition, targetScrollPosition),
           scrollByDistance = getScrollByDistance(timeDifference, remainingDistance, timeLeft);
 
-        previousTimePassed = timePassed;
+          previousTimePassed = timePassed;
       }
 
       var nextScrollPosition = getNextScrollPosition(currentScrollPosition, scrollByDistance);
 
-      if (nextScrollPosition.x >= target.offsetLeft || nextScrollPosition.y >= target.offsetTop || timePassed >= duration) {
+      if (isFinalFrame(nextScrollPosition, target, timePassed, duration, directionDelta)) {
         container.scrollTo(targetScrollPosition.x - containerDelta.x, targetScrollPosition.y - containerDelta.y);
         if (options.onAfter) {
           options.onAfter();
